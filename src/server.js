@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import pool from "./config/db.js";
 import employeeRoutes from "./routes/employeeRoutes.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT;
@@ -13,3 +14,9 @@ app.get("/", (req, res) => {
   res.json({ success: true, message: "Server is running on 9000" });
 });
 app.use("/api/employees", employeeRoutes);
+// unknown end points
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: "End Point Not Found" });
+});
+// error handler
+app.use(errorHandler)
