@@ -7,10 +7,11 @@ import {
   getEmployeeById,
   updateEmployee,
 } from "../controllers/employeeController.js";
+import { validateEmployee } from "../middleware/validateEmployee.js";
 const router = express.Router();
 router.get("/", getAllEmployees);
 router.get("/:id", getEmployeeById);
-router.post("/", createEmployee);
-router.put("/:id", updateEmployee);
+router.post("/", validateEmployee, createEmployee);
+router.put("/:id", validateEmployee, updateEmployee);
 router.delete("/:id", deleteEmployee);
 export default router;

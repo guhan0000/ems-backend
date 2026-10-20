@@ -3,10 +3,12 @@ import dotenv from "dotenv";
 import pool from "./config/db.js";
 import employeeRoutes from "./routes/employeeRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { requestLogger } from "./middleware/requestLogger.js";
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT;
 app.use(express.json());
+app.use(requestLogger);
 app.listen(PORT, () => {
   console.log("api is running", PORT);
 });
@@ -19,4 +21,4 @@ app.use((req, res) => {
   res.status(404).json({ success: false, message: "End Point Not Found" });
 });
 // error handler
-app.use(errorHandler)
+app.use(errorHandler);

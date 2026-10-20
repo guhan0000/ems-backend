@@ -33,11 +33,11 @@ export async function createEmployee(req, res, next) {
     const lastName = req.body.lastName.trim();
     const email = req.body.email.trim();
     const employeeId = req.body.employeeId.trim();
-    if (!email || !employeeId || !firstName || !lastName) {
-      return res
-        .status(400)
-        .json({ success: false, message: "All fields are required" });
-    }
+    // if (!email || !employeeId || !firstName || !lastName) {
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, message: "All fields are required" });
+    // }
     const insertId = await employeeService.createEmployee({
       employeeId: employeeId.trim(),
       firstName: firstName.trim(),
@@ -45,7 +45,7 @@ export async function createEmployee(req, res, next) {
       email: email.trim(),
     });
     const employee = await employeeService.getEmployeeById(employeeId);
-    res.json({ success: true, data: employee });
+    res.status(201).json({ success: true, data: employee });
   } catch (error) {
     next(error);
   }
