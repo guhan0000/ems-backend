@@ -38,3 +38,39 @@ export async function deleteEmployee(id) {
   );
   return results.affectedRows > 0;
 }
+export async function searchEmployee(keyword) {
+  const search = `%${keyword}%`;
+  const [rows] = await pool.execute(
+    `SELECT * FROM employees WHERE first_name LIKE ? OR last_name LIKE ? OR email LIKE ?`,
+    [search, search, search],
+  );
+  return rows;
+}
+export async function filterEmployeeByDept(dept) {
+  const [rows] = await pool.execute(
+    "SELECT employee_id, first_name, last_name, email, dept FROM employees WHERE dept=?",
+    [dept],
+  );
+  return rows;
+}
+export async function filterEmployees({ dept, city }) {
+  const conditions = [];
+  const values = [];
+  let sql = "SELECT * FROM employees";
+  if (dept) {
+    conditions.push("dept = ?");
+    values.push(dept);
+  }
+  if (city) {
+    conditions.push("city = ?");
+    values.push(city);
+  }
+  if (conditions.length > 0) {
+    sql += " WHERE " + conditions.join(" AND ");
+  }
+  sql += " ORDER BY employee_id";
+  const [rows] = await pool.execute(sql, values);
+  console.log(sql);
+
+  return rows;
+}

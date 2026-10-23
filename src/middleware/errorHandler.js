@@ -14,8 +14,9 @@ export function errorHandler(err, req, res, next) {
       .status(409)
       .json({ success: false, message: "Email or Employee Id already exists" });
   }
-  res.status(500).json({
+  return res.status(err.status || 500).json({
     success: false,
-    message: "Internal Server Error Occured",
+    message:
+      err.status && err.status < 500 ? err.message : "Internal Server Error",
   });
 }
